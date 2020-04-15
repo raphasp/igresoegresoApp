@@ -2,24 +2,43 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 
+import { Store } from '@ngrx/store';
+import { AppState } from '../app.reducer';
+import * as AuthActions from '../auth/auth.action';
+
 import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
+  userStoreSubscription: Subscription;
   constructor(
     public authFireBase: AngularFireAuth,
-    public fireStore: AngularFirestore
+    private fireStore: AngularFirestore,
+    private _stoteRedux: Store<AppState>
   ) { }
 
   initAuthListener = () =>{
-    this.authFireBase.authState.subscribe(firebaseUser => {
-      console.log('holas');
-      console.log(firebaseUser);
+    this.authFireBase.authState.subscribe(fUser => {
+      //console.log(firebaseUser?.uid);
+      if (fUser) {
+        
+        this. userStoreSubscription = this.fireStore.doc(`${fUser.uid}/usuario`).valueChanges()
+                              .subscribe((UsuarioFireStore: any) => {
+                                const user = User.fromFirebase(UsuarioFireStore)
+                                this._stoteRedux.dispatch(AuthActions.setUser({user}));
+                              });
+        
+      } else {
+        console.log('llamar al unset del user');
+        this. userStoreSubscription.unsubscribe();
+        this._stoteRedux.dispatch(AuthActions.unSetUser());
+        
+      }
+      //this._stoteRedux.dispatch(AuthActions.setUser());
     });
   }
 
