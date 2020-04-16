@@ -5,6 +5,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
 import { AppState } from '../app.reducer';
 import * as AuthActions from '../auth/auth.action';
+import * as IngresoEgresoAction from '../ingreso-egreso/ingreso-egreso.actions';
 
 import { map } from 'rxjs/operators';
 import { Observable, Subscription } from 'rxjs';
@@ -15,6 +16,12 @@ import { User } from '../models/user.model';
 })
 export class AuthService {
   userStoreSubscription: Subscription;
+  private _userGlobal: User;
+
+  get userGlobal() {
+    return {...this._userGlobal}
+  }
+
   constructor(
     public authFireBase: AngularFireAuth,
     private fireStore: AngularFirestore,
@@ -26,16 +33,24 @@ export class AuthService {
       //console.log(firebaseUser?.uid);
       if (fUser) {
         
-        this. userStoreSubscription = this.fireStore.doc(`${fUser.uid}/usuario`).valueChanges()
-                              .subscribe((UsuarioFireStore: any) => {
-                                const user = User.fromFirebase(UsuarioFireStore)
-                                this._stoteRedux.dispatch(AuthActions.setUser({user}));
-                              });
+        this. userStoreSubscription = this.fireStore.doc(`${fUser.uid}/usuario`)
+          .valueChanges()
+          .subscribe((UsuarioFireStore: any) => {
+            const user = User.fromFirebase(UsuarioFireStore)
+            this._userGlobal = user;
+            this._stoteRedux.dispatch(AuthActions.setUser({user}));
+          });
         
       } else {
         console.log('llamar al unset del user');
-        this. userStoreSubscription.unsubscribe();
+        this._userGlobal = null;
+        try {
+          this.userStoreSubscription.unsubscribe();
+        } catch (error) {
+          console.log(`Error : ${error}`);
+        }
         this._stoteRedux.dispatch(AuthActions.unSetUser());
+        this._stoteRedux.dispatch(IngresoEgresoAction.unsetItem());
         
       }
       //this._stoteRedux.dispatch(AuthActions.setUser());
