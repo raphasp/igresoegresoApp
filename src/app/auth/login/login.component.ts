@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this._authServe.loginUser(email, password)
       .then(request => {
-        console.log(request);
+        //console.log(request);
         // Swal.close();
 
         this._storeRedux.dispatch(UI.stopLoading());
@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this._roters.navigate(['/']);
     }).catch(error => {
       this._storeRedux.dispatch(UI.stopLoading());
-      console.error(error);
+      //console.error(error);
       Swal.fire({
         icon: 'error',
         title: 'Oops...',

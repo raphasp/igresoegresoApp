@@ -1,11 +1,11 @@
 Sección de Ingreso y Egreso
-
-Crear modelo de Ingresos y Egresos
-Pantallas de captura de datos
-Servicio de Ingreso Egreso
-Loadings
-Acciones y Reducer de Ingresos y Egresos
-Leer de Firebase
-Grabar a Firebase
-Gráficas dinámicas
-Y otras cosas
+Módulos de Angular
+Módulo Auth
+Módulo Share
+Módulo de Ingresos y Egresos
+Dashboard Routing Module
+Implementar LazyLoad en Angular
+Guard
+Can Activate
+Can Load
+Implementar el StoreModule.forFeature()
