@@ -1,11 +1,4 @@
-Sección de Ingreso y Egreso
-Módulos de Angular
-Módulo Auth
-Módulo Share
-Módulo de Ingresos y Egresos
-Dashboard Routing Module
-Implementar LazyLoad en Angular
-Guard
-Can Activate
-Can Load
-Implementar el StoreModule.forFeature()
+Uso del FirebaseCLI
+FirebaseHosting
+Despliegue a producción de nuestra aplicación
+Pruebas de nuestra aplicación de ingreso y egreso
